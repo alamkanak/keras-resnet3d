@@ -70,20 +70,15 @@ def _bn_relu_conv3d(**conv_params):
 
 def _shortcut3d(input, residual):
     """3D shortcut to match input and residual and merges them with "sum"."""
-    stride_dim1 = ceil(input._keras_shape[DIM1_AXIS] \
-        / residual._keras_shape[DIM1_AXIS])
-    stride_dim2 = ceil(input._keras_shape[DIM2_AXIS] \
-        / residual._keras_shape[DIM2_AXIS])
-    stride_dim3 = ceil(input._keras_shape[DIM3_AXIS] \
-        / residual._keras_shape[DIM3_AXIS])
-    equal_channels = residual._keras_shape[CHANNEL_AXIS] \
-        == input._keras_shape[CHANNEL_AXIS]
+    stride_dim1 = ceil(input.shape[DIM1_AXIS].value / residual.shape[DIM1_AXIS].value)
+    stride_dim2 = ceil(input.shape[DIM2_AXIS].value / residual.shape[DIM2_AXIS].value)
+    stride_dim3 = ceil(input.shape[DIM3_AXIS].value / residual.shape[DIM3_AXIS].value)
+    equal_channels = residual.shape[CHANNEL_AXIS] == input.shape[CHANNEL_AXIS]
 
     shortcut = input
-    if stride_dim1 > 1 or stride_dim2 > 1 or stride_dim3 > 1 \
-            or not equal_channels:
+    if stride_dim1 > 1 or stride_dim2 > 1 or stride_dim3 > 1 or not equal_channels:
         shortcut = Conv3D(
-            filters=residual._keras_shape[CHANNEL_AXIS],
+            filters=residual.shape[CHANNEL_AXIS],
             kernel_size=(1, 1, 1),
             strides=(stride_dim1, stride_dim2, stride_dim3),
             kernel_initializer="he_normal", padding="valid",
@@ -199,8 +194,7 @@ class Resnet3DBuilder(object):
 
         # Arguments
             input_shape: Tuple of input shape in the format
-            (conv_dim1, conv_dim2, conv_dim3, channels) if dim_ordering='tf'
-            (filter, conv_dim1, conv_dim2, conv_dim3) if dim_ordering='th'
+            (conv_dim1, conv_dim2, conv_dim3, channels)
             num_outputs: The number of outputs at the final softmax layer
             block_fn: Unit block to use {'basic_block', 'bottlenack_block'}
             repetitions: Repetitions of unit blocks
@@ -211,10 +205,7 @@ class Resnet3DBuilder(object):
         _handle_data_format()
         if len(input_shape) != 4:
             raise ValueError("Input shape should be a tuple "
-                             "(conv_dim1, conv_dim2, conv_dim3, channels) "
-                             "for tensorflow as backend or "
-                             "(channels, conv_dim1, conv_dim2, conv_dim3) "
-                             "for theano as backend")
+                             "(conv_dim1, conv_dim2, conv_dim3, channels) ")
 
         block_fn = _get_block(block_fn)
         input = Input(shape=input_shape)
