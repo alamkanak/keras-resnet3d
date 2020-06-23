@@ -20,20 +20,20 @@ keras-voxresnet enables __volumetric image classification__ with keras and tenso
 
 #### Dependencies
 
-[keras](https://keras.io/#installation), [tensorflow](https://www.tensorflow.org/install/)/[theano](http://deeplearning.net/software/theano/install.html) and their corresponding dependencies.
+[keras](https://keras.io/#installation), [tensorflow](https://www.tensorflow.org/install/) and their corresponding dependencies.
 
 
 #### Install with `pip`
 
 ```bash
-$ pip install git+https://github.com/JihongJu/keras-resnet3d.git
+$ pip install git+https://github.com/alamkanak/keras-resnet3d.git
 ```
 
 
 #### Build from source
 
 ```bash
-$ git clone https://github.com/JihongJu/keras-resnet3d.git
+$ git clone https://github.com/alamkanak/keras-resnet3d.git
 $ cd keras-resnet3d
 $ python setup.py build
 ```
